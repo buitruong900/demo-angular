@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+.ngx-pagination a,
+.ngx-pagination button {
+    color: #0a0a0a;
+    display: block;
+    padding: .1875rem .625rem;
+    border-radius: 0;
+    text-decoration: none ;
+}

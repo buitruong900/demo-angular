@@ -1,0 +1,18 @@
+<div class="container">
+  <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand mb-0 h1 nav-link" *ngIf="loginService.isAdmin() || loginService.isUser()" routerLink="/home">TRANG CHỦ</a>
+      <a class="navbar-brand mb-0 h1 nav-link" *ngIf="canManageProduct" routerLink="/products">QUẢN LÝ PRODUCT</a>
+      <a class="navbar-brand mb-0 h1 nav-link" *ngIf="canMangeAcount"routerLink="/manage">QUẢN LÝ ROLE</a>
+    </div>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/register" *ngIf="!loginService.isAdmin() && !loginService.isUser()">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="loginService.isAdmin() || loginService.isUser()" (click)="logOut()">LogOut</a>
+      </li>
+    </ul>
+  </nav>
+  <router-outlet></router-outlet>
+</div>

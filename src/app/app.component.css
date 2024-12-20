@@ -1,0 +1,60 @@
+.container {
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
+
+.navbar {
+  background-color: #343a40; /* Màu nền tối */
+}
+
+.navbar-brand {
+  color: #ffffff; /* Màu chữ trắng */
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.navbar-brand:hover {
+  color: #ffc107; /* Màu chữ khi di chuột */
+  text-decoration: none; /* Xóa gạch chân khi di chuột */
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  margin-left: 15px;
+}
+
+.nav-link {
+  color: #ffffff; /* Màu chữ trắng */
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.nav-link:hover {
+  color: #ffc107; /* Màu chữ khi di chuột */
+  background-color: #495057; /* Nền khi di chuột */
+  text-decoration: none; /* Xóa gạch chân khi di chuột */
+}
+
+.ml-auto {
+  margin-left: auto; /* Đẩy các mục sang bên phải */
+}
+
+.container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Đẩy "Quản lý product" và "Quản lý chức vụ" sang bên trái */
+.navbar .navbar-brand.nav-link {
+  margin-right: auto;
+}
+
+.router-outlet {
+  margin-top: 20px; /* Thêm khoảng cách trên cùng cho nội dung */
+}

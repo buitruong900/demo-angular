@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .login-container label {
+            font-size: 14px;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .login-container label.error {
+            color: red;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .login-container input.error {
+            border-color: red;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .login-container button:hover {
+            background-color: #218838;
+        }
+
+        .login-container .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .login-container .forgot-password a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .login-container .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        .google-login-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+          #google-signin-button {
+              width: 100%;
+              padding: 10px;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              font-size: 16px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+          }
+          #google-signin-button .google-icon {
+              margin-right: 10px;
+          }
+
+          #google-signin-button span {
+              font-weight: bold;
+          }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form (ngSubmit)="onSubmit()" >
+          <input type="text"id="email"name="email"[(ngModel)]="email"placeholder="Enter your email"required #emailInput="ngModel"(blur)="onEmailInput()"(input)="onEmailInput()"[ngClass]="{'error': errorMessage}">
+        <div *ngIf="errorMessage" style="color: red;">
+          {{ errorMessage }}
+        </div>
+
+            <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="Enter your password" required #passwordInput="ngModel" [ngClass]="{'error': passwordInput.invalid && passwordInput.touched}">
+            <div *ngIf="passwordInput.invalid && passwordInput.touched" style="color: red;">
+              Mật khẩu không được để trống.
+            </div>
+            <div *ngIf="passwordErrorMessage" style="color: red;">{{ passwordErrorMessage }}</div>
+
+
+            <button type="submit">Login</button>
+
+            <div id="google-signin-button">
+              <span>Sign in with Google</span>
+            </div>
+            <div class="forgot-password">
+                <a href="#">Forgot password?</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+

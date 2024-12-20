@@ -1,0 +1,333 @@
+<h1 class="text-center">LIST PRODUCT</h1>
+<div class="mb-3">
+  <form (ngSubmit)="onSearch()" *ngIf="canSearchProduct">
+    <div class="row">
+      <div class="form-group col">
+        <label for="name"></label>
+        <ng-select
+        [items]="allProducts"
+        bindLabel="proName"
+        bindValue="proName"
+        [(ngModel)]="searchDto.proName"
+        name="proName"
+        placeholder="proName"
+        (change)="onSearch()"
+        >
+      </ng-select>
+      </div>
+
+      <div class="form-group col">
+        <label for="address"></label>
+        <ng-select
+          [items]="allProducts"
+          bindLabel="producer"
+          bindValue="producer"
+          placeholder="producer"
+          [(ngModel)]="searchDto.producer"
+          name="producer"
+          (change)="onSearch()"
+        >
+        </ng-select>
+      </div>
+      <div class="form-group col">
+        <label for="address"></label>
+        <ng-select
+          [items]="allProducts"
+          bindLabel="yearMaking"
+          bindValue="yearMaking"
+          placeholder="yearMaking"
+          [(ngModel)]="searchDto.yearMaking"
+          name="yearMaking"
+          (change)="onSearch()"
+        >
+        </ng-select>
+      </div>
+      <div class="form-group col">
+        <label for="address"></label>
+        <ng-select
+          [items]="allProducts"
+          bindLabel="quality"
+          bindValue="quality"
+          placeholder="quality"
+          [(ngModel)]="searchDto.quality"
+          name="quality"
+          (change)="onSearch()"
+        >
+        </ng-select>
+      </div>
+      <div class="form-group col">
+        <label for="address"></label>
+        <ng-select
+          [items]="allProducts"
+          bindLabel="price"
+          bindValue="price"
+          placeholder="price"
+          [(ngModel)]="searchDto.price"
+          name="price"
+          (change)="onSearch()"
+        >
+        </ng-select>
+      </div>
+      <div class="form-group col">
+        <label for="startDate"></label>
+        <input
+          type="date"
+          class="form-control"
+          id="startDate"
+          [(ngModel)]="searchDto.startDate"
+          name="startDate"
+          (change)="onSearch()"
+        />
+      </div>
+      <div class="form-group col">
+        <label for="endDate"></label>
+        <input
+          type="date"
+          class="form-control"
+          id="expDate"
+          [(ngModel)]="searchDto.expDate"
+          name="expDate"
+          (change)="onSearch()"
+        />
+      </div>
+      <div class="col pt-4">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass" *ngIf="canSearchProduct"></i></button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="col pt-4">
+  <button type="button" class="btn btn-success me-2" (click)="exportExcel()" *ngIf="canExportProduct">
+    <i class="fas fa-file-excel"></i> Export Excel
+  </button>
+  <div class="modal fade" id="duplicateImportModal" tabindex="-1" aria-labelledby="duplicateImportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="duplicateImportModalLabel">Duplicate Product Detection</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            {{errorMessage}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary" (click)="importSkipDuplicateImportExcel()">
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input #fileInput type="file"  style="display: none"(change)="importExcel($event)" accept=".xlsx, .xls">
+  <button type="button" class="btn btn-warning" (click)="fileInput.click()" *ngIf="canImportProduct || canImportProductSkipDulicateImportExcel">
+  <i class="fas fa-file-import"></i> Import Excel
+  </button>
+  <button *ngIf="canAddProduct" type="button" class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#productModal"><i class="fas fa-plus-circle"></i></button>
+
+</div>
+
+<br/>
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        <input *ngIf="canDeleteProduct"type="checkbox" (change)="selectAll($event)" />
+      </th>
+      <th>PRONAME</th>
+      <th>PRODUCER</th>
+      <th>YEARMAKING</th>
+      <th>EXPRIDATE</th>
+      <th>QUALITY</th>
+      <th>PRICE</th>
+      <th *ngIf="canUpdateProduct && canDeleteProduct  ">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor = "let product of pageResponse.content | paginate: { itemsPerPage:pageResponse.size, currentPage: pageResponse.page+1, totalItems: pageResponse.totalElements }">
+      <td>
+        <input *ngIf="canDeleteProduct "type="checkbox" [(ngModel)]="product.selected" />
+      </td>
+      <td>{{product.proName}}</td>
+      <td>{{product.producer}}</td>
+      <td>{{product.yearMaking}}</td>
+      <td>{{product.expDate | date  :"dd/MM/yyyy"}}</td>
+      <td>{{product.quality}}</td>
+      <td>
+        {{product.price | currency:'':'':'1.0-0':'en-US'}}
+        <small>VNĐ</small>
+      </td>
+      <td>
+
+        <button *ngIf="canUpdateProduct"(click)="detailProduct(product)" type="button" class="btn btn-info me-2">
+          <i class="fas fa-wrench"></i>
+        </button>
+
+        <button *ngIf="canDeleteProduct"(click)="deleteProductDto.proId = product.proId"data-bs-toggle="modal"
+        data-bs-target="#confrimDele" type="button" class="btn btn-danger">
+        <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class=" justify-content-center d-flex">
+  <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+</div>
+<br/>
+<br/>
+<!-- add -->
+<div class="modal fade"
+ id="productModal"
+ tabindex="-1"
+ role="dialog"
+ aria-labelledby="exampleModalLabel"
+ aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Post New Product</h5>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+          <div class="row g-3">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Product Name" formControlName="proName" name="proName" id="proName">
+              <div *ngIf="productForm.get('proName')?.invalid && (productForm.get('proName')?.dirty || productForm.get('proName')?.touched)" class="alert">
+                <div *ngIf="productForm.get('proName')?.errors?.['required']" style="color: red;">Không được để trống proname.</div>
+                <div *ngIf="productForm.get('proName')?.errors?.['minlength']" style="color: red;">Proname phải dài 4 ký tự.</div>
+              </div>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Producer" formControlName="producer">
+              <div *ngIf="productForm.get('producer')?.invalid && (productForm.get('producer')?.dirty || productForm.get('producer')?.touched)" class="alert">
+                <div *ngIf="productForm.get('producer')?.errors?.['required']" style="color: red;">Không được để trống producer.</div>
+                <div *ngIf="productForm.get('producer')?.errors?.['minlength']" style="color: red;">Producer phải dài 4 ký tự.</div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row g-3">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="YearMaking" formControlName="yearMaking">
+              <div *ngIf="productForm.get('yearMaking')?.invalid && (productForm.get('yearMaking')?.dirty || productForm.get('yearMaking')?.touched)" class="alert">
+                <div *ngIf="productForm.get('yearMaking')?.errors?.['required']" style="color: red;">Không được để trống YearMaking.</div>
+              </div>
+            </div>
+            <div class="col">
+              <input type="date" class="form-control" placeholder="Expridate" formControlName="expDate">
+              <div *ngIf="productForm.get('expDate')?.invalid && (productForm.get('expDate')?.dirty || productForm.get('expDate')?.touched)" class="alert">
+                <div *ngIf="productForm.get('expDate')?.errors?.['required']" style="color: red;">Không được để trống Expiration Date.</div>
+                <div *ngIf="productForm.get('expDate')?.errors?.['pattern']" style="color: red;">Expiration Date phải đúng định dạng YYYY-MM-DD.</div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row g-3">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Quality" formControlName="quality">
+              <div *ngIf="productForm.get('quality')?.invalid && (productForm.get('quality')?.dirty || productForm.get('quality')?.touched)" class="alert">
+                <div *ngIf="productForm.get('quality')?.errors?.['required']" style="color: red;">Không được để trống Quality.</div>
+                <div *ngIf="productForm.get('quality')?.errors?.['minlength']" style="color: red;">Quality phải dài ít nhất 2 ký tự.</div>
+                <div *ngIf="productForm.get('quality')?.errors?.['pattern']" style="color: red;">Quality phải là một số.</div>
+              </div>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Price" formControlName="price">
+              <div *ngIf="productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)" class="alert">
+                <div *ngIf="productForm.get('price')?.errors?.['required']" style="color: red;">Không được để trống Price.</div>
+                <div *ngIf="productForm.get('price')?.errors?.['pattern']" style="color: red;">Price phải là một số.</div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button [disabled]="productForm.invalid" class="btn btn-primary" type="submit"><i class="fas fa-plus-circle"></i> Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- update -->
+<div class="modal fade" id="detailProductModal" tabindex="-1" aria-labelledby="detailProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailProductModalLabel">Product Detail</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedProduct">
+        <form [formGroup]="productForm">
+          <div class="mb-3">
+            <label for="proName" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="proName" formControlName="proName">
+          </div>
+          <div class="mb-3">
+            <label for="producer" class="form-label">Producer</label>
+            <input type="text" class="form-control" id="producer" formControlName="producer">
+          </div>
+          <div class="mb-3">
+            <label for="yearMaking" class="form-label">Year Making</label>
+            <input type="number" class="form-control" id="yearMaking" formControlName="yearMaking">
+          </div>
+          <div class="mb-3">
+            <label for="expDate" class="form-label">Expiry Date</label>
+            <input type="date" class="form-control" id="expDate" formControlName="expDate">
+          </div>
+          <div class="mb-3">
+            <label for="quality" class="form-label">Quality</label>
+            <input type="number" class="form-control" id="quality" formControlName="quality">
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="price" formControlName="price">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="updateProduct()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- delete -->
+<div
+  class="modal fade"
+  id="confrimDele"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">Bạn có chắc chắn muốn xóa không ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="deleteProduct()"
+          data-bs-dismiss="modal"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

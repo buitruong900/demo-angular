@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="otp-container">
+    <h2>Xác nhận mã OTP</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="userOtpDto.email"
+          name="email"
+          required
+          class="form-control"
+          placeholder="Nhập email của bạn"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          id="otp"
+          [(ngModel)]="userOtpDto.otpCode"
+          name="otpCode"
+          required
+          class="form-control"
+          placeholder="Nhập mã OTP"
+        />
+      </div>
+      <div>
+        <span
+          class="otp-text"
+          (click)="resendOtp()"
+          *ngIf="timer <= 0"
+          >Mã OTP đã hết hạn. Xác nhận gửi lại mã OTP.</span
+        >
+        <span *ngIf="timer > 0" class="timer-text">{{ timer }}s</span>
+      </div>
+    <br/>
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        {{ isLoading ? 'Đang xử lý...' : 'Xác nhận' }}
+      </button>
+    </form>
+  </div>
+
+</body>
+</html>

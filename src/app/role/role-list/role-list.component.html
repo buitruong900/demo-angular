@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container mt-4">
+    <h2>Danh sách Role</h2>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Role Name</th>
+          <th>Permission</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of roleDto">
+          <td>
+            <input
+              type="checkbox"
+              [(ngModel)]="role.selected"
+              (change)="onCheckboxChange(role)"
+            />
+          </td>
+           <td>{{ role.name }}</td>
+           <td>
+            <div>
+              <div *ngFor="let permission of role.permissions">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="permission.selected"
+                  (change)="onCheckboxPermission(permission, role)"
+                />
+                {{ permission.nameUrl }}
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
